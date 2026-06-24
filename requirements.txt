@@ -1,0 +1,7 @@
+# Self-Improving Local AI Agent — pure-Python, local-first stack.
+# Pin to compatible lower bounds; everything runs locally with no cloud calls.
+
+nicegui>=2.0          # pure-Python desktop-style web UI (chat, controls, graph)
+plotly>=5.18          # interactive line graph for benchmark scores
+APScheduler>=3.10     # authorized-window scheduling for the self-improvement loop
+requests>=2.31        # talks to the local Ollama HTTP API (no SDK required)

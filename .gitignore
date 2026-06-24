@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Local data (SQLite + WAL). Keep the directory, ignore the contents.
+data/*.sqlite
+data/*.sqlite-wal
+data/*.sqlite-shm
+data/*.db
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# NiceGUI / runtime
+.nicegui/
+*.log
