@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Daily Interest Trading Projection</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app__header">
+      <h1>Daily Interest Trading Projection</h1>
+      <p class="subtitle">Adjustable compound-growth graph for daily trading returns.</p>
+    </header>
+
+    <main class="layout">
+      <!-- ---------- Controls ---------- -->
+      <section class="controls" aria-label="Projection controls">
+        <div class="control">
+          <label for="startInput">Starting amount</label>
+          <div class="control__row">
+            <input type="range" id="startRange" min="100" max="50000" step="10" value="2660" />
+            <div class="control__value">
+              <span class="prefix">$</span>
+              <input type="number" id="startInput" min="0" step="10" value="2660" />
+            </div>
+          </div>
+        </div>
+
+        <div class="control">
+          <label for="investInput">Investment percentage <span class="hint">(% of balance traded each day)</span></label>
+          <div class="control__row">
+            <input type="range" id="investRange" min="0" max="100" step="0.5" value="99" />
+            <div class="control__value">
+              <input type="number" id="investInput" min="0" max="100" step="0.5" value="99" />
+              <span class="suffix">%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="control">
+          <label for="rateInput">Daily interest rate <span class="hint">(return on the invested portion)</span></label>
+          <div class="control__row">
+            <input type="range" id="rateRange" min="0" max="10" step="0.05" value="1" />
+            <div class="control__value">
+              <input type="number" id="rateInput" min="0" step="0.05" value="1" />
+              <span class="suffix">%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="control">
+          <label for="monthsInput">Time period</label>
+          <div class="control__row">
+            <input type="range" id="monthsRange" min="1" max="24" step="1" value="6" />
+            <div class="control__value">
+              <input type="number" id="monthsInput" min="1" max="120" step="1" value="6" />
+              <span class="suffix">months</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="control control--inline">
+          <label class="checkbox">
+            <input type="checkbox" id="weekdaysOnly" />
+            Trade weekdays only <span class="hint">(~21 days/month)</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" id="logScale" />
+            Logarithmic Y axis
+          </label>
+        </div>
+
+        <button id="resetBtn" class="reset" type="button">Reset to defaults</button>
+      </section>
+
+      <!-- ---------- Chart + stats ---------- -->
+      <section class="results">
+        <div class="stats" id="stats"></div>
+        <div class="chart-wrap">
+          <canvas id="chart"></canvas>
+          <div class="tooltip" id="tooltip" hidden></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app__footer">
+      <p>
+        Each day the invested portion earns the daily rate, so the balance grows by
+        <code>1 + (investment% &times; daily rate)</code> per trading day. Projection only &mdash;
+        not financial advice.
+      </p>
+    </footer>
+  </div>
+
+  <script src="projection.js"></script>
+</body>
+</html>
