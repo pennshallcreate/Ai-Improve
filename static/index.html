@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ai-Improve</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <h1>Ai-Improve</h1>
+    <p class="tag">Teach it, ask it, connect it to the web.</p>
+  </header>
+
+  <section class="stats" id="stats" aria-live="polite">
+    <span><b id="stat-docs">0</b> examples</span>
+    <span><b id="stat-labels">0</b> labels</span>
+    <span><b id="stat-vocab">0</b> words known</span>
+  </section>
+
+  <main>
+    <!-- Teach -->
+    <article class="card">
+      <h2>Teach</h2>
+      <textarea id="train-text" rows="3" placeholder="Example text the AI should learn from..."></textarea>
+      <div class="row">
+        <input id="train-label" type="text" placeholder="Label (e.g. positive)" />
+        <button id="train-btn">Train</button>
+      </div>
+      <p class="out" id="train-out"></p>
+    </article>
+
+    <!-- Ask -->
+    <article class="card">
+      <h2>Ask</h2>
+      <textarea id="predict-text" rows="3" placeholder="Text to classify..."></textarea>
+      <button id="predict-btn">Predict</button>
+      <div class="out" id="predict-out"></div>
+    </article>
+
+    <!-- Internet -->
+    <article class="card wide">
+      <h2>Internet</h2>
+      <div class="row">
+        <input id="web-query" type="text" placeholder="Search the web or paste a URL..." />
+        <button id="search-btn">Search</button>
+        <button id="fetch-btn" class="ghost">Fetch URL</button>
+        <button id="learn-btn" class="ghost">Learn from web</button>
+      </div>
+      <input id="learn-label" type="text" placeholder="Label for 'Learn from web' (optional)" />
+      <div class="out" id="web-out"></div>
+    </article>
+  </main>
+
+  <footer>
+    <button id="reset-btn" class="danger">Reset model</button>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>
