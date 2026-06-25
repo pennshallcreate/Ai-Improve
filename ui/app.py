@@ -63,6 +63,8 @@ def create_app(controller: LoopController, db: Database, config: Config) -> None
             with ui.tab_panel(tab_chat):
                 ui.label("Chat with the local model (Ollama). Fully local — no cloud.")\
                     .classes("text-sm text-slate-500")
+                chat_banner = ui.markdown("").classes(
+                    "w-full text-sm px-3 py-2 rounded")
                 chat_box = ui.column().classes(
                     "w-full gap-2 p-3 bg-slate-50 rounded").style("min-height:50vh")
                 _render_chat(chat_box, db)
@@ -128,6 +130,17 @@ def create_app(controller: LoopController, db: Database, config: Config) -> None
             plot.update_figure(build_figure(db, state["show_suites"]))
             log_table.rows = _format_log(db.recent_iterations(60))
             _render_commits(commits_box, controller, db)
+            if snap["ollama_up"]:
+                chat_banner.content = f"🟢 Connected to Ollama · model **{snap['model']}**"
+                chat_banner.classes(replace="w-full text-sm px-3 py-2 rounded bg-green-50")
+            else:
+                chat_banner.content = (
+                    "🔴 **Ollama not detected** — chat is offline. Install it from "
+                    "[ollama.com/download](https://ollama.com/download), run "
+                    f"`ollama pull {snap['model']}`, then type below (no restart needed). "
+                    "Everything else works without it."
+                )
+                chat_banner.classes(replace="w-full text-sm px-3 py-2 rounded bg-red-50")
 
         ui.timer(0.1, refresh, once=True)   # first paint, awaited on the event loop
         ui.timer(2.5, refresh)              # then keep it live

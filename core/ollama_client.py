@@ -58,10 +58,16 @@ class OllamaClient:
                         yield chunk
                     if obj.get("done"):
                         break
-        except requests.RequestException as exc:
+        except requests.RequestException:
             yield (
-                f"\n\n_[Ollama unavailable: {exc}. Start it with `ollama serve` and "
-                f"`ollama pull {model or self.model}`.]_"
+                "⚠️ **I can't reach a local model.** Ollama isn't running at "
+                f"`{self.base_url}`.\n\n"
+                "To enable chat:\n"
+                "1. Install Ollama → https://ollama.com/download\n"
+                f"2. In a terminal: `ollama pull {model or self.model}`\n"
+                "3. Come back and type again — no restart needed.\n\n"
+                "_Everything else works without Ollama — try **Run one iteration** "
+                "on the Dashboard._"
             )
 
     # -- generate (single shot, for the improver) ----------------------------
