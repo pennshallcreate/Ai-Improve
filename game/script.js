@@ -15,14 +15,16 @@ const SKIN_TONES = [
   { id: "dark", modifier: "\u{1F3FF}", label: "Dark" },
 ];
 
-// Each headwear option maps to a base emoji that supports Fitzpatrick skin
-// tone modifiers. Purely cosmetic — none of these change gameplay.
+// Each headwear option maps to a base emoji. Purely cosmetic — none of these
+// change gameplay. Only "modifier base" emoji (person-shaped ones) support
+// Fitzpatrick skin tone modifiers; 🤠 is a plain face emoji and renders a
+// broken glyph if a tone modifier is appended, so it's excluded via `tonable`.
 const HEADWEAR_OPTIONS = [
-  { id: "cowboy", label: "Cowboy Hat", base: "\u{1F920}" }, // 🤠
-  { id: "kippah", label: "Kippah", base: "\u{1F9D1}", accessory: "kippah" }, // 🧑 + drawn accessory
-  { id: "hijab", label: "Hijab", base: "\u{1F9D5}" }, // 🧕
-  { id: "turban", label: "Turban", base: "\u{1F473}" }, // 👳
-  { id: "none", label: "No Headwear", base: "\u{1F9D1}" }, // 🧑
+  { id: "cowboy", label: "Cowboy Hat", base: "\u{1F920}", tonable: false }, // 🤠
+  { id: "kippah", label: "Kippah", base: "\u{1F9D1}", tonable: true, accessory: "kippah" }, // 🧑 + drawn accessory
+  { id: "hijab", label: "Hijab", base: "\u{1F9D5}", tonable: true }, // 🧕
+  { id: "turban", label: "Turban", base: "\u{1F473}", tonable: true }, // 👳
+  { id: "none", label: "No Headwear", base: "\u{1F9D1}", tonable: true }, // 🧑
 ];
 
 const STARTING_CASH = 1000;
@@ -49,7 +51,25 @@ let character = { name: "Trader", tone: SKIN_TONES[0], headwear: HEADWEAR_OPTION
 // ---------------------------------------------------------------------------
 
 function spriteString(tone, headwear) {
-  return headwear.base + tone.modifier;
+  return headwear.base + (headwear.tonable ? tone.modifier : "");
+}
+
+// No Unicode emoji exists for a kippah, so it's approximated as a plain
+// person plus a small drawn dome — both here (DOM preview/buttons) and in
+// the canvas arena via drawKippahAccessory().
+function createSpriteSpan(tone, headwear) {
+  const wrap = document.createElement("span");
+  wrap.className = "sprite-wrap";
+  const emojiSpan = document.createElement("span");
+  emojiSpan.className = "sprite-emoji";
+  emojiSpan.textContent = spriteString(tone, headwear);
+  wrap.appendChild(emojiSpan);
+  if (headwear.accessory === "kippah") {
+    const dome = document.createElement("span");
+    dome.className = "kippah-dot";
+    wrap.appendChild(dome);
+  }
+  return wrap;
 }
 
 function buildTonePicker() {
@@ -91,7 +111,8 @@ function buildHeadwearPicker() {
     const btn = document.createElement("button");
     btn.className = "option-btn" + (hw.id === character.headwear.id ? " selected" : "");
     btn.type = "button";
-    btn.textContent = `${spriteString(character.tone, hw)} ${hw.label}`;
+    btn.appendChild(createSpriteSpan(character.tone, hw));
+    btn.appendChild(document.createTextNode(" " + hw.label));
     btn.addEventListener("click", () => {
       character.headwear = hw;
       buildHeadwearPicker();
@@ -102,7 +123,9 @@ function buildHeadwearPicker() {
 }
 
 function updatePreview() {
-  document.getElementById("sprite-preview").textContent = spriteString(character.tone, character.headwear);
+  const preview = document.getElementById("sprite-preview");
+  preview.innerHTML = "";
+  preview.appendChild(createSpriteSpan(character.tone, character.headwear));
   buildHeadwearPicker();
 }
 
@@ -319,6 +342,17 @@ function drawChart() {
   ctx.lineWidth = 1;
 }
 
+// No Unicode emoji exists for a kippah, so it's drawn as a small dome sitting
+// just above the head of the (skin-tone-modified) 🧑 base emoji.
+function drawKippahAccessory(centerX, baselineY) {
+  ctx.fillStyle = "#4a6fa5";
+  ctx.strokeStyle = "#1f3a5f";
+  ctx.beginPath();
+  ctx.ellipse(centerX, baselineY - 44, 9, 6, 0, Math.PI, 0);
+  ctx.fill();
+  ctx.stroke();
+}
+
 function drawArena() {
   ctx.fillStyle = "#3b2a17";
   ctx.fillRect(0, ARENA_TOP, canvas.width, ARENA_HEIGHT);
@@ -328,9 +362,11 @@ function drawArena() {
   ctx.fillRect(PLAYER_X - 40, ARENA_TOP, 140, ARENA_HEIGHT);
 
   // player sprite
+  const playerBaseline = ARENA_TOP + ARENA_HEIGHT - 20;
   ctx.font = "48px sans-serif";
   ctx.textAlign = "center";
-  ctx.fillText(spriteString(character.tone, character.headwear), PLAYER_X, ARENA_TOP + ARENA_HEIGHT - 20);
+  ctx.fillText(spriteString(character.tone, character.headwear), PLAYER_X, playerBaseline);
+  if (character.headwear.accessory === "kippah") drawKippahAccessory(PLAYER_X, playerBaseline);
   ctx.font = "20px sans-serif";
   ctx.fillStyle = "#f5e9d8";
   ctx.fillText(character.name, PLAYER_X, ARENA_TOP + ARENA_HEIGHT + 5);

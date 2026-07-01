@@ -84,6 +84,24 @@ h1 { text-align: center; margin: 0 0 4px; }
 
 .sprite-preview { font-size: 2.4em; }
 
+.sprite-wrap {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+}
+
+.kippah-dot {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32%;
+  height: 24%;
+  background: #4a6fa5;
+  border: 1px solid #1f3a5f;
+  border-radius: 50% 50% 10% 10% / 65% 65% 10% 10%;
+}
+
 .primary-btn {
   display: block;
   width: 100%;
