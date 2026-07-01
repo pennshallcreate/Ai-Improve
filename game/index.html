@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Rodeo Trader</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ===================== START / CUSTOMIZATION SCREEN ===================== -->
+  <div id="start-screen" class="screen">
+    <h1>🤠 Rodeo Trader 📈</h1>
+    <p class="subtitle">Buy low, sell high, and lasso the odd bull that runs through the arena.</p>
+
+    <label class="field-label" for="trader-name">Your name</label>
+    <input id="trader-name" type="text" maxlength="16" placeholder="Trader" value="Trader">
+
+    <p class="field-label">Skin tone</p>
+    <div id="tone-picker" class="option-row"></div>
+
+    <p class="field-label">Headwear <span class="hint">(cosmetic only — no gameplay effect)</span></p>
+    <div id="headwear-picker" class="option-row"></div>
+
+    <div class="preview-box">
+      <span class="preview-label">Preview:</span>
+      <span id="sprite-preview" class="sprite-preview"></span>
+    </div>
+
+    <button id="start-btn" class="primary-btn">Start Trading</button>
+
+    <div class="instructions">
+      <strong>How to play</strong>
+      <ul>
+        <li><b>Buy</b> invests 25% of your cash in stock. <b>Sell</b> sells 25% of your shares.</li>
+        <li>A wild <b>bull</b> occasionally runs through — press <b>SPACE</b> when it's in range to lasso it for a cash bonus.</li>
+        <li>Watch out for the <b>bear</b> — lasso it in time or it'll spook your position and cost you cash.</li>
+        <li>Survive 60 days. Your final score is your total portfolio value.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===================== GAME SCREEN ===================== -->
+  <div id="game-screen" class="screen hidden">
+    <div id="hud">
+      <div class="hud-item"><span class="hud-label">Trader</span><span id="hud-name">-</span></div>
+      <div class="hud-item"><span class="hud-label">Day</span><span id="hud-day">0/60</span></div>
+      <div class="hud-item"><span class="hud-label">Price</span><span id="hud-price">$0.00</span></div>
+      <div class="hud-item"><span class="hud-label">Cash</span><span id="hud-cash">$0</span></div>
+      <div class="hud-item"><span class="hud-label">Shares</span><span id="hud-shares">0</span></div>
+      <div class="hud-item"><span class="hud-label">Portfolio</span><span id="hud-portfolio">$0</span></div>
+    </div>
+
+    <canvas id="game-canvas" width="800" height="450"></canvas>
+
+    <div id="controls">
+      <button id="buy-btn">Buy (25% cash) [B]</button>
+      <button id="sell-btn">Sell (25% shares) [S]</button>
+      <div class="lasso-hint">Press <b>SPACE</b> to lasso!</div>
+    </div>
+  </div>
+
+  <!-- ===================== GAME OVER SCREEN ===================== -->
+  <div id="end-screen" class="screen hidden">
+    <h1 id="end-title">Game Over</h1>
+    <p id="end-summary"></p>
+    <button id="restart-btn" class="primary-btn">Play Again</button>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
